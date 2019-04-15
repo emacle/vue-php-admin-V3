@@ -1,32 +1,37 @@
 <template>
   <div class="navbar">
-    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
+    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
 
-    <breadcrumb class="breadcrumb-container"/>
+    <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
+
       <template v-if="device!=='mobile'">
+        <!-- <el-select v-model="value" placeholder="请选择" @change="roleChange()">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select> -->
         <search class="right-menu-item" />
 
-        <error-log class="errLog-container right-menu-item hover-effect"/>
+        <error-log class="errLog-container right-menu-item hover-effect" />
 
-        <screenfull class="right-menu-item hover-effect"/>
+        <screenfull class="right-menu-item hover-effect" />
 
         <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-          <size-select class="right-menu-item hover-effect"/>
+          <size-select class="right-menu-item hover-effect" />
         </el-tooltip>
 
-        <lang-select class="right-menu-item hover-effect"/>
+        <lang-select class="right-menu-item hover-effect" />
 
         <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
-          <theme-picker class="right-menu-item hover-effect"/>
+          <theme-picker class="right-menu-item hover-effect" />
         </el-tooltip>
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom"/>
+          <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
@@ -70,6 +75,18 @@ export default {
     ThemePicker,
     Search
   },
+  data() {
+    return {
+      options: [{
+        value: '1',
+        label: '超级管理员'
+      }, {
+        value: '2',
+        label: '测试角色'
+      }],
+      value: '1'
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
@@ -87,6 +104,19 @@ export default {
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
     }
+    // roleChange() {
+    //   const loginForm = {
+    //     username: 'qiaokun',
+    //     password: 'qiaokun'
+    //   }
+    //   // this.$router.push({ path: this.redirect || '/sys/menu' })
+    //   // this.$store.dispatch('get_userinfo',
+    //   //   this.$store.dispatch('LoginByUsername', loginForm).then(() => {
+    //   //     console.log('loginForm...', loginForm)
+    //   //   }).catch(() => {
+    //   //   })
+    //   // location.reload()
+    // }
   }
 }
 </script>
@@ -101,10 +131,10 @@ export default {
     height: 100%;
     float: left;
     cursor: pointer;
-    transition: background .3s;
+    transition: background 0.3s;
 
     &:hover {
-      background: rgba(0, 0, 0, .025)
+      background: rgba(0, 0, 0, 0.025);
     }
   }
 
@@ -136,10 +166,10 @@ export default {
 
       &.hover-effect {
         cursor: pointer;
-        transition: background .3s;
+        transition: background 0.3s;
 
         &:hover {
-          background: rgba(0, 0, 0, .025)
+          background: rgba(0, 0, 0, 0.025);
         }
       }
     }

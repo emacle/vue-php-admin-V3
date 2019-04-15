@@ -1,4 +1,4 @@
-# 项目说明
+# vue-php-admin 项目说明
 
 基于 vue-element-admin 和 PHP CodeIgniter RESTful 实现，
 采用前后端分离架构的权限管理系统，PHP快速开发平台，目标是搭建一
@@ -11,13 +11,16 @@
 归档集中在样例模板下，见 @router/index.js constantRouterMap，
 其余组件如 tags-views等，全部未做变化，可根据需要具体需求进行删减。 
 
+## demo地址
+ [vue-php-admin](http://172.30.3.11:7000/)
+
 ## 功能介绍
 1. 系统登录：系统用户登录，系统登录认证（token方式）
-2. 用户管理：新建用户，修改用户，删除用户，查询用户
-3. 角色管理：新建角色，修改角色，删除角色，查询角色
-4. 菜单管理：新建菜单，修改菜单，删除菜单，查询菜单
-5. 图标管理：vue-element-admin 原有封装组件
-6. ......
+         2. 用户管理：新建用户，修改用户，删除用户，查询用户
+         3. 角色管理：新建角色，修改角色，删除角色，查询角色
+         4. 菜单管理：新建菜单，修改菜单，删除菜单，查询菜单
+         5. 图标管理：vue-element-admin 原有封装组件
+         6. ......
 
 ## 开发环境 
 - phpstudy  php 5.6.27 nts + Apache
@@ -49,7 +52,7 @@
 
 ### 后端
 1. 下载后端代码解压
-2. 创建数据库 vueadmin, 导入 **vueadmin.sql** 文件
+2. 创建数据库 vueadmin, 导入 **vueadmin.sql** 文件，尽量使用命令行导入，navcat-for-mysql导入有时会出错
 3. 后端数据库连接配置 修改配置文件
 
     cat application\config\database.php
@@ -77,8 +80,8 @@
     带有 index.php 若要去掉 修改根目录下 CodeIgniter-3.1.10/.htaccess 文件(Apache), 注意不是 CodeIgniter-3.1.10/application/ 目录下
     Nginx的话需要对应的配置
     
-   cat CodeIgniter-3.1.10/.htaccess
-
+    cat CodeIgniter-3.1.10/.htaccess
+    
     ```html
       <IfModule mod_rewrite.c>
         RewriteEngine on
