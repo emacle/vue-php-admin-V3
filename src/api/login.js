@@ -1,9 +1,11 @@
 import request from '@/utils/request'
 
-export function loginByUsername(username, password) {
+export function loginByUsername(username, password, verify, verifycode) {
   const data = {
     username,
-    password
+    password,
+    verify,
+    verifycode
   }
   return request({
     url: '/sys/user/login',
@@ -27,3 +29,11 @@ export function getUserInfo(token) {
   })
 }
 
+// 企业微信认证
+export function corpAuth(code) {
+  return request({
+    url: '/sys/user/corpauth',
+    method: 'get',
+    params: { code }
+  })
+}

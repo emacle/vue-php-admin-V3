@@ -1,4 +1,4 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
+import { loginByUsername, logout, getUserInfo, corpAuth } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -70,11 +70,28 @@ const user = {
     LoginByUsername({ commit }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        loginByUsername(username, userInfo.password).then(response => {
+        loginByUsername(username, userInfo.password, userInfo.verify, userInfo.verifycode).then(response => {
           const data = response.data
           commit('SET_TOKEN', data.token)
           setToken(response.data.token)
           resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // 企业微信认证
+    corpAuth({ commit }, code) {
+      return new Promise((resolve, reject) => {
+        corpAuth(code).then(response => {
+          console.log('corpAuth response...', response)
+          const data = response.data
+          if (data.status === 'ok') {
+            commit('SET_TOKEN', data.token)
+            setToken(response.data.token)
+            resolve()
+          }
         }).catch(error => {
           reject(error)
         })

@@ -24,7 +24,13 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <!-- <drag-verify v-show="!vSuccess" ref="Verify" :width="width" :height="height" :text="text" :success-text="successText" :background="background" :progress-bar-bg="progressBarBg" :completed-bg="completedBg" :handler-bg="handlerBg" :handler-icon="handlerIcon" :text-size="textSize" :success-icon="successIcon" :circle="true"></drag-verify> -->
+      <!--  background:#2d3a4b -->
+      <el-form-item prop="verifycode" style=" border: 1px;color: #454545; background:#2d3a4b; position: relative;">
+        <el-input v-model="loginForm.verifycode" placeholder="请输入验证码" style="width:363px; background: rgba(0, 0, 0, 0.1);" />
+        <!-- fit="fill"  fits: ['fill', 'contain', 'cover', 'none', 'scale-down'], -->
+        <img :src="VerificationImg" style="position: absolute;top:5px;margin-right:20px" @click="clickVerification">
+      </el-form-item>
+
       <drag-verify
         v-show="!vSuccess"
         ref="Verify"
@@ -38,7 +44,7 @@
         background="#ddd"
         progress-bar-bg="#409EFF"
         text-size="16px"
-        @passcallback="passcallback"/>
+        @passcallback="passcallback" />
       <el-button v-if="vSuccess" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">
         {{ $t('login.logIn') }}
       </el-button>
@@ -70,6 +76,8 @@
       <br>
       <social-sign />
     </el-dialog>
+
+    <div id="wx_qrcode" />
   </div>
 </template>
 
@@ -78,6 +86,7 @@ import { validUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 import dragVerify from 'vue-drag-verify'
+import random from 'string-random'
 
 export default {
   name: 'Login',
@@ -98,9 +107,13 @@ export default {
       }
     }
     return {
+      VerificationImg: '', // 图形验证码链接
+      verify: '', // 图形验证码链接参数 r=100015015015
       loginForm: {
         username: 'admin',
-        password: 'admin'
+        password: 'admin',
+        verify: '',
+        verifycode: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -123,11 +136,52 @@ export default {
   },
   created() {
     // window.addEventListener('hashchange', this.afterQRScan)
+    this.wxLogin()
   },
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)
   },
+  mounted() {
+    this.clickVerification()
+    // https://blog.csdn.net/msllws/article/details/81223949 修改默认样式
+    window.WwLogin({
+      'id': 'wx_qrcode',
+      // "appid": "xxxxxxx",
+      // "agentid": "1000000",
+      // "redirect_uri": encodeURI('http://redirect'),
+      'appid': 'xxx', // #gitignore
+      'agentid': 'xxx', // #gitignore
+      'redirect_uri': encodeURI('get-corp-weixin-code.html?redirect_uri=' + encodeURI(window.location.origin)), // #gitignore
+      'state': random(16, { specials: false, numbers: true, letters: false }),
+      'href': 'data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDIwMHB4O30NCi5pbXBvd2VyQm94IC50aXRsZSB7ZGlzcGxheTogbm9uZTt9DQouaW1wb3dlckJveCAuaW5mbyB7d2lkdGg6IDIwMHB4O30NCi5zdGF0dXNfaWNvbiB7ZGlzcGxheTogbm9uZX0NCi5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9',
+      'style': 'black'
+    })
+  },
   methods: {
+    // 获取当前 location.href 里的参数值
+    getUrlParms(name) {
+      var reg = new RegExp('(^|\\?|&)' + name + '=([^&]*)(\\s|&|$)', 'i')
+      // console.log('getvl', location.href)
+      // http://localhost:9527/?code=8xpU6UL2kEiJngHmjOD87ZBbI2gC_bU1uGOMXvyVmn0&state=4924807670805111#/login?redirect=%2Fdashboard
+      if (reg.test(location.href)) { return unescape(RegExp.$2.replace(/\+/g, ' ')) }
+      return ''
+    },
+    wxLogin() {
+      console.log('location与windows.location好像是一样...', location)
+      if (location.search && location.search.indexOf('code=') >= 0 && location.search.indexOf('state=') >= 0) {
+        const code = this.getUrlParms('code')
+        this.loading = true
+        this.$store.dispatch('corpAuth', code).then(() => {
+          this.loading = false
+          this.$router.push({ path: '/' })
+          console.log('location------', location)
+          // TODO: 成功登录后 去掉 ?code=xxxxx 好像多跳转了几次
+          window.location.replace(window.location.origin)
+        }).catch(() => {
+          this.loading = false
+        })
+      }
+    },
     passcallback() {
       this.vSuccess = true
     },
@@ -167,6 +221,7 @@ export default {
             this.vSuccess = false
             // 恢复滑动到原点
             this.resetVerify()
+            this.clickVerification()
           })
         } else {
           console.log('error submit!!')
@@ -174,6 +229,15 @@ export default {
         }
       })
     },
+    // 获取验证码
+    clickVerification() {
+      // var num = Math.random();
+      this.verify = new Date().getTime()
+      this.loginForm.verify = this.verify
+      // console.log(this.loginForm)
+      this.VerificationImg = 'http://www.cirest.com:8889/api/v3/sys/user/verifycode?verify=' + this.verify
+    },
+
     afterQRScan() {
       // const hash = window.location.hash.slice(1)
       // const hashObj = getQueryObject(hash)
@@ -193,6 +257,7 @@ export default {
       // }
     }
   }
+
 }
 </script>
 
