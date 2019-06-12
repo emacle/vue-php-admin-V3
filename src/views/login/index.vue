@@ -149,9 +149,6 @@ export default {
       // "appid": "xxxxxxx",
       // "agentid": "1000000",
       // "redirect_uri": encodeURI('http://redirect'),
-      'appid': 'xxx', // #gitignore
-      'agentid': 'xxx', // #gitignore
-      'redirect_uri': encodeURI('get-corp-weixin-code.html?redirect_uri=' + encodeURI(window.location.origin)), // #gitignore
       'state': random(16, { specials: false, numbers: true, letters: false }),
       'href': 'data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDIwMHB4O30NCi5pbXBvd2VyQm94IC50aXRsZSB7ZGlzcGxheTogbm9uZTt9DQouaW1wb3dlckJveCAuaW5mbyB7d2lkdGg6IDIwMHB4O30NCi5zdGF0dXNfaWNvbiB7ZGlzcGxheTogbm9uZX0NCi5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9',
       'style': 'black'
