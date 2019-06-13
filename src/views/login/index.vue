@@ -171,9 +171,6 @@ export default {
         this.$store.dispatch('corpAuth', code).then(() => {
           this.loading = false
           this.$router.push({ path: '/' })
-          console.log('location------', location)
-          // TODO: 成功登录后 去掉 ?code=xxxxx 好像多跳转了几次
-          window.location.replace(window.location.origin)
         }).catch(() => {
           this.loading = false
         })

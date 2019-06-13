@@ -24,6 +24,15 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
+      // console.log('permissions.js window.location...', location)
+      // hash: "#/dashboard"
+      // search: "?code=0v3XiK9oMVHDMT0AIdE3FpPKNfJmNIjntJraR0rvqQk&state=8479171645418553"
+      // 微信扫码登录去掉?code state参数
+      if (location.search.indexOf('code=') >= 0 && location.search.indexOf('state=') >= 0) {
+        window.location.replace(window.location.origin + '/' + window.location.hash)
+        // TODO: 成功登录后 去掉 ?code=xxxxx 好像多跳转了几次
+        // window.location.replace(window.location.origin)
+      }
       if (store.getters.roles.length === 0) { // 判断当前用户是否已拉取完user_info信息
         store.dispatch('GetUserInfo').then(res => { // 拉取user_info
           // const roles = res.data.roles // note: roles must be a array! such as: ['editor','develop']
@@ -44,7 +53,9 @@ router.beforeEach((to, from, next) => {
         if (hasPermission(store.getters.roles, to.meta.roles)) {
           next()
         } else {
-          next({ path: '/401', replace: true, query: { noGoBack: true }})
+          next({
+            path: '/401', replace: true, query: { noGoBack: true }
+          })
         }
         // 可删 ↑
       }
