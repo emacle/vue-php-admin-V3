@@ -148,7 +148,7 @@ export default {
       'id': 'wx_qrcode',
       // "appid": "xxxxxxx",
       // "agentid": "1000000",
-      // "redirect_uri": encodeURI('http://redirect'),
+      // "redirect_uri": encodeURIComponent('http://yw.xxx.com/ksh/get-corp-weixin-code.html?redirect_uri='),  // yw.xxx.com 是企业微信里的回调域名
       'state': random(16, { specials: false, numbers: true, letters: false }),
       'href': 'data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDIwMHB4O30NCi5pbXBvd2VyQm94IC50aXRsZSB7ZGlzcGxheTogbm9uZTt9DQouaW1wb3dlckJveCAuaW5mbyB7d2lkdGg6IDIwMHB4O30NCi5zdGF0dXNfaWNvbiB7ZGlzcGxheTogbm9uZX0NCi5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9',
       'style': 'black'
