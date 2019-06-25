@@ -8,6 +8,7 @@ export function loginByUsername(username, password, verify, verifycode) {
     verifycode
   }
   return request({
+    // url: 'http://localhost:8889/api/v2/sys/user/login', // 带有http的 会忽略@/utils/request 里的 BaseURL 直接更换了接口
     url: '/sys/user/login',
     method: 'post',
     data
