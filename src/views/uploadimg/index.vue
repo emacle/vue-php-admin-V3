@@ -61,7 +61,8 @@ export default {
         phone: ''
       },
       dropzoneOptions: {
-        url: 'http://www.cirest.com:8889/api/v2/uploadimg/upload',
+        // url: 'http://www.cirest.com:8889/api/v2/uploadimg/upload',
+        url: 'http://www.cirest.com:8889/api/example/chevereto',
         // 最大文件大小，单位是 MB
         maxFilesize: 10,
         dictFileTooBig: '图片最大10M',
@@ -92,9 +93,8 @@ export default {
           console.log(file)
           console.log('File ' + file.name + ' uploaded')
           // console.log(file)
-          // console.log(response)
           var res = JSON.parse(response)
-          // console.log(res)
+          console.log(res)
           var fileinfo = {
             'serverFileName': res.filepath,
             'fileName': file.name
@@ -104,7 +104,12 @@ export default {
           this.$store.dispatch('SetFileLists', fileList)
           // this.$store.state.uploadimg.fileLists = fileList
           console.log(this.$store.state.uploadimg.fileLists)
-          this.$message(res.message)
+          this.$message(res.message) // uploadimg_post 接口返回信息格式
+          // if(res.status_code == 200){ // chevereto_post 接口返回信息格式
+          //    this.$message(res.success.message)
+          // } else {
+          //    this.$message(res.error.message)
+          // }
         },
         removedfile: file => {
           file.previewElement.remove()
