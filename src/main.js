@@ -26,9 +26,16 @@ Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
 
-// 同时使用 DataTables 和 DataTablesServer
+// 全局引用使用 DataTables 和 DataTablesServer
 import VueDataTables from 'vue-data-tables'
 Vue.use(VueDataTables)
+
+// 全局引用树形表组件 单一模块里不用再引用
+import TreeTableComponent from 'element-ui-tree-table'
+import 'element-ui-tree-table/dist/index.css'
+Vue.use(TreeTableComponent, {
+  prefix: 'i' // 可选
+})
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {

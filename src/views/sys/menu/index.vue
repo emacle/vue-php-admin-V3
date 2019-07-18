@@ -4,19 +4,19 @@
       <el-input v-perm="['/sys/menu/view']" v-model="filterText" placeholder="菜单名称" style="width: 200px;" class="filter-item" />
       <!-- <el-button v-waves class="filter-item" type="primary" :size="btnsize" icon="el-icon-search" v-perm="['/sys/menu/view']" @click="handleFilter">查询</el-button> -->
       <el-button v-perm="['/sys/menu/add']" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">添加</el-button>
-      <el-switch v-model="defaultExpandAll" :active-text="defaultExpandAll?'展开节点':'折叠节点'" :active-value="true" :inactive-value="false" inactive-color="gainsboro" />
+      <!-- <el-switch v-model="defaultExpandAll" :active-text="defaultExpandAll?'展开节点':'折叠节点'" :active-value="true" :inactive-value="false" inactive-color="gainsboro" /> -->
     </div>
     <!-- tableData.filter( data => !filterText || filterData(data, function(item){return item.title.includes(filterText) })) -->
-    <el-table ref="TreeTable" :data="tableData" row-key="id" highlight-current-row stripe @selection-change="selectChange">
-      <el-table-column prop="title" label="菜单名称" align="left" min-width="120" />
-      <el-table-column prop="id" label="菜单ID" align="center" />
-      <el-table-column prop="path" label="菜单路由" align="center" />
-      <el-table-column prop="name" label="路由别名" align="center" />
-      <el-table-column prop="icon" label="图标" align="center">
+    <i-tree-table ref="TreeTable" :data="tableData" :columns="columns" id-key="id" icon="el-icon-arrow-right" stripe border @trigger="onTrigger">
+      <el-table-column label="菜单ID" prop="id" />
+      <el-table-column label="菜单路由" prop="path" />
+      <el-table-column label="路由别名" prop="name" />
+      <el-table-column label="图标" prop="icon" align="center">
         <template slot-scope="scope">
           <svg-icon :icon-class="scope.row.icon" />
         </template>
       </el-table-column>
+
       <el-table-column prop="type" label="类型" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.type===0" size="small">目录</el-tag>
@@ -28,14 +28,13 @@
       <el-table-column prop="component" label="组件" align="center" />
       <el-table-column prop="redirect" label="重定向" align="center" />
       <el-table-column prop="listorder" label="排序" align="center" />
-
       <el-table-column prop="operation" label="操作" align="center" min-width="180" fixed="right">
         <template slot-scope="scope">
           <el-button v-perm="['/sys/menu/edit']" :size="btnsize" type="success" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button v-perm="['/sys/menu/del']" :size="btnsize" type="danger" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </i-tree-table>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="" label-width="90px" style="width: 400px; margin-left:50px;">
@@ -86,7 +85,6 @@
 <script>
 import waves from '@/directive/waves' // Waves directive
 import perm from '@/directive/perm/index.js' // 权限判断指令
-import TreeTable from '@/components/TreeTable'
 // import data from './data.js'
 // import treemenu from './treemenu.js'
 import { createMenu, updateMenu, deleteMenu, getTreeOptions, getMenuTree } from '@/api/menu'
@@ -102,13 +100,26 @@ import _ from 'lodash'
 export default {
   name: 'SysMenuSnIc',
   // 所以在编写路由 router 和路由对应的 view component 的时候一定要确保 两者的 name 是完全一致的。
-  // register the component Treeselect, TreeTable
-  components: { TreeTable, Treeselect },
+  // register the component Treeselect, TreeTableComponent
+  components: { Treeselect },
   directives: { waves, perm },
   filters: {
   },
   data() {
     return {
+      // columns treeTable 中定义 配置索引列，选择列和展开列
+      columns: [
+        // {
+        //   type: 'index',
+        //   align: 'center'
+        // }, {
+        //   type: 'selection',
+        //   align: 'center'
+        // },
+        {
+          label: '菜单名称',
+          prop: 'title'
+        }],
       // 'href': windows.location.href,
       // 'total': '100',
       path: this.$route.path,
@@ -128,6 +139,8 @@ export default {
       defaultExpandAll: false,
       tableData: [],
       tableDatax: [],
+      // 保留折叠状态
+      treeExpandedKeys: [],
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -169,11 +182,13 @@ export default {
     defaultExpandAll(val) {
       if (val) {
         this.$nextTick(() => {
-          this.expandAll()
+          // this.expandAll()
+          this.$refs.TreeTable.expandAll()
         })
       } else {
         this.$nextTick(() => {
-          this.expandAll()
+          // this.expandAll()
+          this.$refs.TreeTable.collapseAll()
         })
       }
     },
@@ -191,9 +206,10 @@ export default {
         }
         this.tableData = this.listToTreeWithLevel(tmpArr, 0, 0)
 
-        // 搜索时展开行
+        // 搜索时展开结果行
         this.$nextTick(() => {
-          this.expandAll()
+          // this.expandQuery()  // 会触发 onTrigger 函数
+          this.$refs.TreeTable.expandAll() // 不触发onTrigger 效果较好
         })
       }
     }
@@ -205,8 +221,25 @@ export default {
   },
 
   methods: {
-    expandAll() {
-      const els = this.$refs.TreeTable.$el.getElementsByClassName('el-table__expand-icon')
+    onTrigger(row, expanded) {
+      row.$expanded = expanded
+      // console.log('onTrigger...', row)
+      // 保留折叠状态
+      if (row.$expanded) {
+        this.treeExpandedKeys.push(row.id)
+        this.treeExpandedKeys = _.uniq(this.treeExpandedKeys) // 过滤搜索时会产生重复的值
+      } else {
+        const index = this.treeExpandedKeys.indexOf(row.id)
+        if (index > -1) {
+          this.treeExpandedKeys.splice(index, 1)
+        }
+      }
+      console.log('onTrigger...treeExpandedKeys', this.treeExpandedKeys)
+    },
+    expandQuery() {
+      // const els = this.$refs.TreeTable.$el.getElementsByClassName('el-table__expand-icon')
+      const els = this.$refs.TreeTable.$el.getElementsByClassName('trigger')
+      // console.info('expandAll els...', els)
       // el-icon-arrow-right
       // console.log('els..length/2....', els.length / 2) // 必须除以2
       for (let i = 0; i < els.length / 2; i++) {
@@ -285,18 +318,27 @@ export default {
       }
       return out
     },
+
+    // 根据 treeExpandedKeys 数组, 遍历设置菜单树折叠状态
+    setTreeCollapseStatus(jsonTree) {
+      for (var i = 0; i < jsonTree.length; i++) {
+        // _.indexOf([3,3], 1);//-1
+        if (_.indexOf(this.treeExpandedKeys, jsonTree[i].id) > -1) {
+          jsonTree[i].$expanded = true
+        }
+        if (jsonTree[i].children) {
+          this.setTreeCollapseStatus(jsonTree[i].children)
+        }
+      }
+    },
     getData() {
       // import { createMenu, getTreeOptions, getMenuTree } from '@/api/menu'
       getMenuTree().then(res => {
         // console.log('getMenuTree', res)
-        this.tableData = res.data
-        this.tableDatax = res.data
-        // 展开所有行
-        // if (this.defaultExpandAll) {
-        //   this.$nextTick(() => {
-        //     this.expandAll()
-        //   })
-        // }
+        const tmpData = res.data
+        this.setTreeCollapseStatus(tmpData)
+        this.tableData = tmpData
+        this.tableDatax = tmpData
       })
     },
     editItem(row) {
