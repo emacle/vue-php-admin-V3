@@ -11,7 +11,7 @@ const treeTableRouter = {
   name: 'TreeTable',
   meta: {
     title: 'treeTable',
-    icon: 'tree-table'
+    icon: 'table'
   },
   children: [
     {
