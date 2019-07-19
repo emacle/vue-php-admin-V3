@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-perm="['/sys/menu/view']" v-model="filterText" placeholder="菜单名称" style="width: 200px;" class="filter-item" />
+      <el-input v-perm="['/sys/menu/view']" ref="filterText" v-model.trim="filterText" placeholder="菜单名称" style="width: 200px;" class="filter-item" />
       <!-- <el-button v-waves class="filter-item" type="primary" :size="btnsize" icon="el-icon-search" v-perm="['/sys/menu/view']" @click="handleFilter">查询</el-button> -->
       <el-button v-perm="['/sys/menu/add']" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">添加</el-button>
       <!-- <el-switch v-model="defaultExpandAll" :active-text="defaultExpandAll?'展开节点':'折叠节点'" :active-value="true" :inactive-value="false" inactive-color="gainsboro" /> -->
@@ -219,7 +219,9 @@ export default {
     // console.log('this.$store.state.user.ctrlperm', this.$store.state.user.ctrlperm)
     this.getData()
   },
-
+  mounted() {
+    this.$refs.filterText.focus()
+  },
   methods: {
     onTrigger(row, expanded) {
       row.$expanded = expanded

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-perm="['/sys/user/view']" v-model="filters[0].value" placeholder="用户名" style="width: 200px;" class="filter-item" />
+      <el-input v-perm="['/sys/user/view']" ref="filterText" v-model.trim="filters[0].value" placeholder="用户名" style="width: 200px;" class="filter-item" />
       <el-select v-perm="['/sys/user/view']" v-model="filters[1].value" clearable class="filter-item">
         <el-option label="启用" value="1" />
         <el-option label="禁用" value="0" />
@@ -255,6 +255,9 @@ export default {
   created() {
     // this.fetchData()
     // this.initRoleAndDeptOptions()
+  },
+  mounted() {
+    this.$refs.filterText.focus()
   },
   methods: {
     // ES6方式 返回数组arr1中比arr2中多出的元素，返回类型为数组

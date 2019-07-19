@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-perm="['/sys/role/view']" v-model="filters[0].value" placeholder="角色名称" style="width: 200px;" class="filter-item" />
+      <el-input v-perm="['/sys/role/view']" ref="filterText" v-model.trim="filters[0].value" placeholder="角色名称" style="width: 200px;" class="filter-item" />
       <el-select v-perm="['/sys/role/view']" v-model="filters[1].value" class="filter-item" multiple="multiple">
         <el-option label="启用" value="1" />
         <el-option label="禁用" value="0" />
@@ -251,6 +251,9 @@ export default {
 
   created() {
     this.fetchData()
+  },
+  mounted() {
+    this.$refs.filterText.focus()
   },
   methods: {
     // 获取数据

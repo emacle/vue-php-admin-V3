@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-perm="['/sys/dept/view']" v-model="filterText" placeholder="机构名称" style="width: 200px;" class="filter-item" />
+      <el-input v-perm="['/sys/dept/view']" ref="filterText" v-model.trim="filterText" placeholder="机构名称" style="width: 200px;" class="filter-item" />
       <el-button v-perm="['/sys/dept/add']" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">{{ $t('table.add') }}</el-button>
     </div>
 
@@ -135,7 +135,9 @@ export default {
   created() {
     this.fetchData()
   },
-
+  mounted() {
+    this.$refs.filterText.focus()
+  },
   methods: {
     // 获取数据
     fetchData() {
