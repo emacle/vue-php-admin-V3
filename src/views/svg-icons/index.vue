@@ -23,7 +23,7 @@
           </div>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="Element-UI Icons">
+      <el-tab-pane label="Element-UI v2.10.1 Icons">
         <div v-for="item of elementIcons" :key="item" @click="handleClipboard(generateElementIconCode(item),$event)">
           <el-tooltip placement="top">
             <div slot="content">
