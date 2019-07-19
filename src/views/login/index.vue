@@ -35,14 +35,18 @@
         v-show="!vSuccess"
         ref="Verify"
         :height="39"
+        :width="450"
         :circle="true"
         style="width:100%;margin-bottom:30px;"
         handler-icon="el-icon-d-arrow-right"
         success-icon="el-icon-check"
         text="拖动滑块到右侧完成验证"
         success-text="验证成功"
-        background="#ddd"
-        progress-bar-bg="#409EFF"
+        background="#ccc"
+        color="#ffffff"
+        progress-bar-bg="#FFFF99"
+        completed-bg="#66cc66"
+        handler-bg="#fff"
         text-size="16px"
         @passcallback="passcallback" />
       <el-button v-if="vSuccess" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">
@@ -192,8 +196,10 @@ export default {
       this.$refs.Verify.isMoving = false
       this.$refs.Verify.x = 0
       this.$refs.Verify.isPassing = false
-      this.$refs.Verify.$refs.handler.style.left = '0'
-      this.$refs.Verify.$refshandlerIcon = 'el-icon-d-arrow-right'
+      var handler = this.$refs.Verify.$refs.handler
+      handler.style.left = '0'
+      // className https://github.com/AshleyLv/vue-drag-verify/issues/2
+      handler.children[0].className = 'el-icon-d-arrow-right'
       this.$refs.Verify.$refs.progressBar.style.width = '0'
     },
     handleLogin() {
