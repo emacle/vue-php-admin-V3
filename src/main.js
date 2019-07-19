@@ -9,6 +9,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import '@/styles/index.scss' // global css
 
+// 在线生成主题色下载引入即可 https://elementui.github.io/theme-chalk-preview/#/zh-CN
+import '@/assets/red-theme/index.css' // 红色主题颜色
+
 import App from './App'
 import store from './store'
 import router from './router'
