@@ -235,7 +235,7 @@ export default {
       this.verify = new Date().getTime()
       this.loginForm.verify = this.verify
       // console.log(this.loginForm)
-      this.VerificationImg = 'http://www.cirest.com:8889/api/v3/sys/user/verifycode?verify=' + this.verify
+      this.VerificationImg = process.env.BASE_API + '/sys/user/verifycode?verify=' + this.verify
     },
 
     afterQRScan() {
