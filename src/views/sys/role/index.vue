@@ -44,7 +44,7 @@
           <el-input-number v-model.trim="temp.listorder" :min="0" controls-position="right" onkeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-switch v-model="temp.status" inactive-color="#ff4949" active-value="1" inactive-value="0" />
+          <el-switch v-model="temp.status" inactive-color="#C0CCDA" active-value="1" inactive-value="0" />
         </el-form-item>
 
       </el-form>
