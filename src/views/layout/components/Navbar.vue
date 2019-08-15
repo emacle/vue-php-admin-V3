@@ -134,6 +134,7 @@ export default {
 .navbar {
   height: 50px;
   overflow: hidden;
+  // background: url("~@/assets/top_bg.jpg") #0288d1;
 
   .hamburger-container {
     line-height: 46px;
