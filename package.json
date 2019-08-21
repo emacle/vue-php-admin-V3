@@ -66,6 +66,7 @@
     "vue-i18n": "7.3.2",
     "vue-password": "^1.2.0",
     "vue-password-validator": "^0.1.8",
+    "vue-qr": "^2.1.0",
     "vue-router": "3.0.2",
     "vue-splitpane": "1.0.2",
     "vue2-dropzone": "^3.5.2",
