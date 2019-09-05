@@ -44,6 +44,11 @@
               {{ $t('navbar.dashboard') }}
             </el-dropdown-item>
           </router-link>
+          <router-link to="/profile/index">
+            <el-dropdown-item>
+              个人中心
+            </el-dropdown-item>
+          </router-link>
           <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>
               {{ $t('navbar.github') }}

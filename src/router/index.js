@@ -79,6 +79,20 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/profile/index',
+    component: Layout,
+    hidden: true,
+    redirect: '/profile/index',
+    children: [
+      {
+        path: '/profile/index',
+        component: () => import('@/views/profile/index'),
+        name: 'Profile',
+        meta: { title: '个人中心', icon: 'user', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/documentation',
     component: Layout,
     redirect: '/documentation/index',
