@@ -72,7 +72,7 @@
                 <div class="user-activity">
                   <div class="post">
                     <div class="user-block">
-                      <img class="img-circle" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDkaQO69Fro8SZLTVZQ75JH2R0T-sn5yIA_lKGwvvgQ0R0BoQtUQ" alt="user image">
+                      <img class="img-circle" src="https://wpimg.wallstcn.com/57ed425a-c71e-4201-9428-68760c0537c4.jpg?imageView2/1/w/80/h/80" alt="user image">
                       <span class="username text-muted">
                         <a href="#">Iron Man</a>
                         <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times" /></a>
@@ -97,7 +97,7 @@
                   </div>
                   <div class="post">
                     <div class="user-block">
-                      <img class="img-circle" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMMN-8f9CQQ3MKJpboBJIqaiJ2Wus2Tf4w_vx9STtalxrY3qGJ" alt="user image">
+                      <img class="img-circle" src="https://wpimg.wallstcn.com/9e2a5d0a-bd5b-457f-ac8e-86554616c87b.jpg?imageView2/1/w/80/h/80" alt="user image">
                       <span class="username text-muted">
                         <a href="#">Captain American</a>
                         <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times" /></a>
@@ -117,7 +117,7 @@
                   </div>
                   <div class="post">
                     <div class="user-block">
-                      <img class="img-circle img-bordered-sm" src="https://cdn3.iconfinder.com/data/icons/movies-3/32/daredevil-superhero-marvel-comics-mutant-avatar-512.png" alt="User Image">
+                      <img class="img-circle img-bordered-sm" src="https://wpimg.wallstcn.com/fb57f689-e1ab-443c-af12-8d4066e202e2.jpg?imageView2/1/w/80/h/80" alt="User Image">
                       <span class="username">
                         <a href="#">Daredevil</a>
                         <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times" /></a>
