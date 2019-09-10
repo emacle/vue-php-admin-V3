@@ -1,87 +1,95 @@
 <template>
-  <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <div class="title-container">
-        <h3 class="title">
-          {{ $t('login.title') }}
-        </h3>
-        <lang-select class="set-language" />
+  <div class="login-container pull-height" @keyup.enter.native="handleLogin">
+    <div class="login-info text-white animated fadeInLeft">
+      <div class="logo" style="margin-top:-426px">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Openlogo-debianV2.svg" width="160px" height="160px" alt="logo" style="vertical-align: middle;">
       </div>
+      <h2 class="login-info-title">VUE-ELEMENT-ADMIN</h2>
+      <ul class="login-info-list">
+        <li class="login-info-item">
+          <i class="el-icon-check" />VUE-ELEMENT-ADMIN 是一个基于XXXX工程可视化管理平台，采用token交互验证方式。
+        </li>
+        <li class="login-info-item">
+          <i class="el-icon-check" />您可以VUE-ELEMENT-ADMIN为基础，不只限制于vue的页面，你可以嵌入任意第三方网站，基于iframe框架。
+        </li>
+        <li class="login-info-item">
+          <i class="el-icon-check" />VUE-ELEMENT-ADMIN 构建简单上手快，最大程度上帮助企业节省时间成本和费用开支。
+        </li>
+      </ul>
+    </div>
+    <div class="login-border animated fadeInRight">
+      <div class="login-main">
+        <h4 class="login-title">登录VUE-ELEMENT-ADMIN</h4>
+        <el-tabs v-model="activeName">
+          <el-tab-pane label="用户密码" name="user">
+            <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+              <el-form-item prop="username">
+                <el-input v-model="loginForm.username" :placeholder="$t('login.username')" name="username" type="text" auto-complete="on">
+                  <i slot="prefix" class="el-icon-user" />
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input v-model="loginForm.password" :type="passwordType" :placeholder="$t('login.password')" name="password" auto-complete="on" @keyup.enter.native="handleLogin">
+                  <i slot="prefix" class="el-icon-lock" />
+                  <i slot="suffix">
+                    <span class="show-pwd" @click="showPwd">
+                      <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                    </span>
+                  </i>
+                </el-input>
 
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input v-model="loginForm.username" :placeholder="$t('login.username')" name="username" type="text" auto-complete="on" />
-      </el-form-item>
+              </el-form-item>
 
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input v-model="loginForm.password" :type="passwordType" :placeholder="$t('login.password')" name="password" auto-complete="on" @keyup.enter.native="handleLogin" />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
-      <!--  background:#2d3a4b -->
-      <el-form-item prop="verifycode" style=" border: 1px;color: #454545; background:#2d3a4b; position: relative;">
-        <el-input v-model="loginForm.verifycode" placeholder="请输入验证码" style="width:363px; background: rgba(0, 0, 0, 0.1);" />
-        <!-- fit="fill"  fits: ['fill', 'contain', 'cover', 'none', 'scale-down'], -->
-        <img :src="VerificationImg" style="position: absolute;top:5px;margin-right:20px" @click="clickVerification">
-      </el-form-item>
+              <el-form-item prop="verifycode">
+                <el-input v-model="loginForm.verifycode" placeholder="请输入验证码">
+                  <template slot="append">
+                    <img :src="VerificationImg" @click="clickVerification">
+                  </template>
+                </el-input>
+              </el-form-item>
 
-      <drag-verify
-        v-show="!vSuccess"
-        ref="Verify"
-        :height="39"
-        :width="450"
-        :circle="true"
-        style="width:100%;margin-bottom:30px;"
-        handler-icon="el-icon-d-arrow-right"
-        success-icon="el-icon-check"
-        text="拖动滑块到右侧完成验证"
-        success-text="验证成功"
-        background="#ccc"
-        color="#ffffff"
-        progress-bar-bg="#FFFF99"
-        completed-bg="#66cc66"
-        handler-bg="#fff"
-        text-size="16px"
-        @passcallback="passcallback" />
-      <el-button v-if="vSuccess" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">
-        {{ $t('login.logIn') }}
-      </el-button>
+              <drag-verify
+                v-show="!vSuccess"
+                ref="Verify"
+                :height="39"
+                :circle="true"
+                style="width:100%;margin-bottom:30px;"
+                handler-icon="el-icon-d-arrow-right"
+                success-icon="el-icon-check"
+                text="拖动滑块到右侧完成验证"
+                success-text="验证成功"
+                background="#ccc"
+                color="#ffffff"
+                progress-bar-bg="#FFFF99"
+                completed-bg="#66cc66"
+                handler-bg="#fff"
+                text-size="16px"
+                @passcallback="passcallback" />
+              <el-button v-if="vSuccess" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">
+                {{ $t('login.logIn') }}
+              </el-button>
 
-      <div style="position:relative">
-        <div class="tips">
-          <span>超级{{ $t('login.username') }} : admin</span>
-          <!-- <span>{{ $t('login.password') }} : {{ $t('login.any') }}</span> -->
-          <span>{{ $t('login.password') }} : admin</span>
-
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">
-            普通{{ $t('login.username') }} : qiaokun
-          </span>
-          <span>{{ $t('login.password') }} : qiaokun</span>
-        </div>
-
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          {{ $t('login.thirdparty') }}
-        </el-button>
+              <div style="position:relative">
+                <div class="tips">
+                  <span>超级{{ $t('login.username') }} : admin</span>
+                  <span>{{ $t('login.password') }} : admin</span>
+                </div>
+                <div class="tips">
+                  <span>
+                    普通{{ $t('login.username') }} : qiaokun
+                  </span>
+                  <span>{{ $t('login.password') }} : qiaokun</span>
+                </div>
+              </div>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="企业微信扫码" name="code">
+            <div id="wx_qrcode" />
+          </el-tab-pane>
+        </el-tabs>
       </div>
-    </el-form>
+    </div>
 
-    <el-dialog :title="$t('login.thirdparty')" :visible.sync="showDialog">
-      {{ $t('login.thirdpartyTips') }}
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>
-
-    <div id="wx_qrcode" />
   </div>
 </template>
 
@@ -91,10 +99,11 @@ import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 import dragVerify from 'vue-drag-verify'
 import random from 'string-random'
+import animated from 'animate.css'
 
 export default {
   name: 'Login',
-  components: { LangSelect, SocialSign, dragVerify },
+  components: { LangSelect, SocialSign, dragVerify, animated },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -111,6 +120,7 @@ export default {
       }
     }
     return {
+      activeName: 'user',
       VerificationImg: '', // 图形验证码链接
       verify: '', // 图形验证码链接参数 r=100015015015
       loginForm: {
@@ -125,7 +135,6 @@ export default {
       },
       passwordType: 'password',
       loading: false,
-      showDialog: false,
       redirect: undefined,
       vSuccess: false
     }
@@ -154,6 +163,7 @@ export default {
       // "agentid": "1000000",
       // "redirect_uri": encodeURIComponent('http://yw.xxx.com/ksh/get-corp-weixin-code.html?redirect_uri='),  // yw.xxx.com 是企业微信里的回调域名
       'state': random(16, { specials: false, numbers: true, letters: false }),
+      // href 自定义二维码样式 可微调大小 TODO
       'href': 'data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDIwMHB4O30NCi5pbXBvd2VyQm94IC50aXRsZSB7ZGlzcGxheTogbm9uZTt9DQouaW1wb3dlckJveCAuaW5mbyB7d2lkdGg6IDIwMHB4O30NCi5zdGF0dXNfaWNvbiB7ZGlzcGxheTogbm9uZX0NCi5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9',
       'style': 'black'
     })
@@ -170,6 +180,7 @@ export default {
     wxLogin() {
       console.log('location与windows.location好像是一样...', location)
       if (location.search && location.search.indexOf('code=') >= 0 && location.search.indexOf('state=') >= 0) {
+        this.activeName = 'code'
         const code = this.getUrlParms('code')
         this.loading = true
         this.$store.dispatch('corpAuth', code).then(() => {
@@ -236,178 +247,125 @@ export default {
       this.loginForm.verify = this.verify
       // console.log(this.loginForm)
       this.VerificationImg = process.env.BASE_API + '/sys/user/verifycode?verify=' + this.verify
-    },
-
-    afterQRScan() {
-      // const hash = window.location.hash.slice(1)
-      // const hashObj = getQueryObject(hash)
-      // const originUrl = window.location.origin
-      // history.replaceState({}, '', originUrl)
-      // const codeMap = {
-      //   wechat: 'code',
-      //   tencent: 'code'
-      // }
-      // const codeName = hashObj[codeMap[this.auth_type]]
-      // if (!codeName) {
-      //   alert('第三方登录失败')
-      // } else {
-      //   this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-      //     this.$router.push({ path: '/' })
-      //   })
-      // }
     }
   }
 
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
-$bg: #283443;
-$light_gray: #eee;
-$cursor: #fff;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-    &::first-line {
-      color: $light_gray;
-    }
-  }
+<style lang="scss" scoped>
+/* 使用方法：在样式代码的前面添加/deep/标示即可 */
+/*  修改element-ui的 el-input-group__append 组件 使验证码显示合适 */
+/deep/ .el-input-group__append {
+  padding: 0 0px;
+  background-color: #ffffff;
+  border: 0px;
 }
-// drag verify
-.drag_verify {
-  border-radius: 4px !important;
-  .dv_progress_bar {
-    border-radius: 4px !important;
-  }
-  .dv_handler {
-    border-radius: 4px !important;
-    top: 1px !important;
-  }
-  .dv_text {
-    background: -webkit-gradient(
-      linear,
-      left top,
-      right top,
-      color-stop(0, #4d4d4d),
-      color-stop(0.4, #4d4d4d),
-      color-stop(0.5, white),
-      color-stop(0.6, #4d4d4d),
-      color-stop(1, #4d4d4d)
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -webkit-text-size-adjust: none;
-    -webkit-animation: slidetounlock 5s infinite;
-  }
-  @-webkit-keyframes slidetounlock {
-    0% {
-      background-position: -200px 0;
-    }
-    100% {
-      background-position: 200px 0;
-    }
-  }
+/deep/ #wx_qrcode > iframe {
+  width: 265px;
+  height: 288px;
 }
-/* reset element-ui css */
 .login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      caret-color: $cursor;
-      &:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
-    }
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.2);
+  position: relative;
+  height: 900px;
+}
+.login-container::before {
+  z-index: -999;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../../assets/images/login.png");
+  background-size: cover;
+}
+.login-info {
+  padding-left: 60px;
+}
+.login-info-title {
+  line-height: 90px;
+  color: #409eff;
+}
+.login-info-item {
+  font-size: 14px;
+  color: rgb(241, 125, 58);
+}
+.login-border {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px 50px 25px 50px;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 1px 1px 2px #eee;
+}
+.login-main {
+  border-radius: 3px;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+.login-main > h3 {
+  margin-bottom: 20px;
+}
+.login-main > p {
+  color: #76838f;
+}
+.login-title {
+  margin: 0 0 20px;
+  text-align: center;
+  color: #409eff;
+  letter-spacing: 3px;
+}
+.login-submit {
+  margin-top: 20px;
+  width: 100%;
+  border-radius: 28px;
+}
+.login-form {
+  margin: 10px 0;
+  .el-form-item__content {
+    width: 270px;
   }
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
+    margin-bottom: 20px;
   }
-}
-</style>
-
-<style rel="stylesheet/scss" lang="scss" scoped>
-$bg: #2d3a4b;
-$dark_gray: #889aa4;
-$light_gray: #eee;
-
-.login-container {
-  min-height: 100%;
-  width: 100%;
-  background-color: $bg;
-  overflow: hidden;
-  .login-form {
-    position: relative;
-    width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
-    overflow: hidden;
-  }
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
-    span {
-      &:first-of-type {
-        margin-right: 16px;
+  .el-input {
+    input {
+      text-indent: 5px;
+      border-color: #dcdcdc;
+      border-radius: 3px;
+    }
+    .el-input__prefix {
+      i {
+        padding: 0 5px;
+        font-size: 16px !important;
       }
     }
   }
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
-  .title-container {
-    position: relative;
-    .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-    }
-    .set-language {
-      color: #fff;
-      position: absolute;
-      top: 3px;
-      font-size: 18px;
-      right: 0px;
-      cursor: pointer;
-    }
-  }
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
-  }
-  .thirdparty-button {
-    position: absolute;
-    right: 0;
-    bottom: 6px;
-  }
+}
+.login-code {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 0 0 0 10px;
+}
+.login-code-img {
+  margin-top: 2px;
+  width: 100px;
+  height: 32px;
+  background-color: #fdfdfd;
+  border: 1px solid #f0f0f0;
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  line-height: 32px;
+  text-indent: 5px;
+  text-align: center;
 }
 </style>

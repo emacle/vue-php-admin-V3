@@ -12,19 +12,19 @@ const treemenu = [
           {
             id: 2,
             title: '菜单管理',
-            pid: 1,
+            pid: 1
 
           },
           {
             id: 3,
             title: '用户管理',
-            pid: 1,
+            pid: 1
 
           },
           {
             id: 4,
             title: '图标管理',
-            pid: 1,
+            pid: 1
 
           }
         ]
@@ -32,12 +32,11 @@ const treemenu = [
       {
         id: 6,
         title: '其他管理',
-        pid: 0,
+        pid: 0
 
       }
     ]
   }
-
 
 ]
 export default treemenu

@@ -45,6 +45,7 @@ export default {
 }
 
 .sidebar-logo-container {
+  border-bottom:1px solid rgb(149, 221, 241);
   position: relative;
   width: 100%;
   height: 50px;

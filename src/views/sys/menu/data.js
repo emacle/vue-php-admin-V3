@@ -83,7 +83,7 @@ const data = [
             pname: '菜单管理',
             component: '',
             redirect: '',
-            listorder: 99         
+            listorder: 99
           },
           {
             id: 6,
@@ -97,7 +97,7 @@ const data = [
             component: '',
             redirect: '',
             listorder: 99
-          
+
           },
           {
             id: 7,
@@ -111,7 +111,7 @@ const data = [
             component: '',
             redirect: '',
             listorder: 99
-          
+
           }
         ]
       },
