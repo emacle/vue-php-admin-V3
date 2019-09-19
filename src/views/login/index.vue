@@ -41,7 +41,7 @@
               </el-form-item>
 
               <el-form-item prop="verifycode">
-                <el-input v-model="loginForm.verifycode" placeholder="请输入验证码">
+                <el-input v-model="loginForm.verifycode" placeholder="请输入验证码" @keyup.enter.native="handleLogin">
                   <template slot="append">
                     <img :src="VerificationImg" @click="clickVerification">
                   </template>

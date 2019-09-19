@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <div class="app-container">
+    <h2>websocket test</h2>
+    <el-input ref="websockTxt" v-model="websockTxt" placeholder="请输入文本消息" style="width: 200px;" class="filter-item" @keyup.enter.native="sendMessage" />
+    <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="sendMessage">发送</el-button>
+    <li v-for="v in websockMsgList" :key="v.nickname">
+      <el-tag type="success">{{ v.nickname }}</el-tag>
+      <el-tag type="info">{{ v.message }}</el-tag>
+    </li>
     <hr>
 
     <el-link href="https://www.jianshu.com/p/33c6787de842" icon="el-icon-s-opportunity" type="primary" target="_blank">Vue--使用vue-qr生成二维码、canvas合成二维码+下方文字标题、jsZip批量压缩图片、FileSaver下载压缩图片</el-link>
@@ -100,6 +107,8 @@ export default {
   },
   data() {
     return {
+      websockTxt: '',
+      websockMsgList: [],
       dataUrls: [],
       passwordType: 'password',
       strengthMessages: ['非常差', '差', 'Medium', 'Strong', 'Very Strong'],
@@ -200,7 +209,49 @@ export default {
       multipleSelection: []
     }
   },
+  mounted: function() {
+    this.initWebSocket()
+  },
+  beforeDestroy: function() {
+    // 页面离开时断开连接
+    this.websocketclose()
+  },
   methods: {
+    initWebSocket() { // 初始化weosocket
+      const wsuri = 'ws://127.0.0.1:8181' // 这个地址由后端童鞋提供
+      this.websock = new WebSocket(wsuri)
+      this.websock.onopen = this.websocketonopen
+      this.websock.onmessage = this.websocketonmessage
+      this.websock.onerror = this.websocketonerror
+      this.websock.onclose = this.websocketclose
+    },
+    websocketonopen() {
+      console.log('Connection to server opened')
+      // todo: this.websock.send(this.websockTxt) // 可以做一些消息发送
+    },
+    websocketonerror() { // 连接建立失败重连
+      this.initWebSocket()
+    },
+    websocketonmessage(e) {
+      var data = JSON.parse(e.data)
+      console.log('接收服务器消息', data)
+      console.log('ID: [%s] = %s', data.id, data.message)
+      this.websockMsgList.push({ 'nickname': data.nickname, 'message': data.message })
+      console.log(this.websockMsgList)
+    },
+    websocketclose(e) { // 关闭
+      this.websock.close()
+    },
+    // 发送消息
+    sendMessage() {
+      if (this.websock.readyState === WebSocket.OPEN) {
+        if (this.websockTxt.trim() !== '') {
+          this.websock.send(this.websockTxt)
+          this.websockTxt = ''
+          this.$refs.websockTxt.focus()
+        }
+      }
+    },
     paintCanvas(id, type) { // id表示对应的二维码标签的id   type表示画布的类型
       const c = document.getElementById('box') // 获取canvas画布 画布大小和canvas大小一致
       const picName = '测试图片' + id
