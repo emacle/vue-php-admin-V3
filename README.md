@@ -55,7 +55,7 @@
 
 ### 后端
 1. 下载后端代码解压  [CodeIgniter-3.1.10](https://github.com/emacle/CodeIgniter-3.1.10.git)
-2. 创建数据库 vueadmin, 导入 **vueadmin-v3.sql** 文件，尽量使用命令行导入，navcat-for-mysql导入有时会出错, 根据出错提示修改配置可成功导入
+2. 创建数据库 vueadmin, 导入 **vueadmin-v3.sql** 文件，navcat-for-mysql导入有时会出错时, 修改 mysql my.ini配置文件参数 mysqld 节点下添加 max_allowed_packet = 500M
 3. 后端数据库连接配置 修改配置文件
 
     cat application\config\database.php
