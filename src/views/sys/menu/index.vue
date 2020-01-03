@@ -482,34 +482,66 @@ export default {
     },
     handleDelete(row) {
       // this.$refs.TreeTable.delete(row)
-      this.$confirm('确认删除选中记录吗？[菜单名称: ' + row.title + ']', '提示', {
-        type: 'warning'
-      }).then(() => {
-        if (row.children) {
-          this.$notify({
-            //  title: '错误',
-            message: row.title + ' - 存在子节点不能删除',
-            type: 'error'
-          })
-          return
-        }
-        const tempData = {
-          'id': row.id,
-          'title': row.title
-        }
-        // 调用api删除数据
-        deleteMenu(tempData).then(res => {
-          // 如果删除成功，后台重新更新数据,否则不更新数据
-          if (res.type === 'success') {
-            this.getData()
+      const h = this.$createElement
+      this.$msgbox({
+        title: '提示',
+        message: h('p', null, [
+          h('span', null, '确认删除选中记录吗？[菜单名称:  '),
+          h('i', { style: 'color: teal' }, row.title),
+          h('span', null, ' ]')
+        ]),
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            if (row.children) {
+              this.$notify({
+                //  title: '错误',
+                message: row.title + ' - 存在子节点不能删除',
+                type: 'error'
+              })
+              return
+            }
+            instance.confirmButtonLoading = true
+            instance.confirmButtonText = '执行中...'
+
+            const tempData = {
+              'id': row.id,
+              'title': row.title
+            }
+            // 调用api删除数据
+            deleteMenu(tempData).then(res => {
+              // 如果删除成功，后台重新更新数据,否则不更新数据
+              // console.log(res)
+              // {code: 20000, type: "success", message: "上传证件照 - 菜单删除成功"}
+              done()
+              instance.confirmButtonLoading = false
+              if (res.type === 'success') {
+                this.getData()
+              }
+              this.$notify({
+                //  title: '错误',
+                message: res.message,
+                type: res.type
+              })
+            }).catch(err => {
+              console.log(err)
+              instance.confirmButtonLoading = false
+            })
+          } else {
+            done()
+            instance.confirmButtonLoading = false // 必须 此会影响 request.js 拦截器里的 messgebox对象导致refresh_token过期后无法点击 一直loading
           }
-          this.dialogFormVisible = false
-          this.$notify({
-            //  title: '错误',
-            message: res.message,
-            type: res.type
-          })
-        })
+        }
+        // }).then(action => {
+      }).then(() => {
+        // this.$message({
+        //   type: 'info',
+        //   message: 'action: ' + action // confirm
+        // })
+      }).catch(() => {
+        // console.log(err)  // cancel
       })
     },
     handleDownload() {
