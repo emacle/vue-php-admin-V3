@@ -95,7 +95,9 @@ const user = {
           const data = response.data
           if (data.status === 'ok') {
             commit('SET_TOKEN', data.token)
-            setToken(response.data.token)
+            commit('SET_REFRESH_TOKEN', data.refresh_token)
+            setToken(data.token)
+            setRefreshToken(data.refresh_token)
             resolve()
           }
         }).catch(error => {
