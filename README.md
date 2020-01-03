@@ -2,6 +2,8 @@
 
 **V3 版本加入动态切换角色功能，不同角色功能不同，同时也可归属不同的部门**
 
+**v3版本前后端均使用 develop 分支,token设计存储在数据库表sys_user_token中, 使用时需要 checkout develop, 开启jwt分支用于以php-jwt生成jwt-token重构**
+
 基于 vue-element-admin 和 PHP CodeIgniter RESTful 实现，
 采用前后端分离架构的权限管理系统，PHP快速开发平台，目标是搭建一
 套简洁易用的快速解决方案，可以帮助用户有效降低项目开发难度和成本。
@@ -18,7 +20,7 @@
  [vue-php-admin](http://172.30.3.11:7000/)
 
 ## 功能介绍
-1. 系统登录：系统用户登录，系统登录认证（token方式），企业微信扫码登录（测试success，缺css）
+1. 系统登录：系统用户登录，系统登录认证（token方式），**企业微信扫码登录（测试success）**
 2. 用户管理：新建用户，修改用户，删除用户，查询用户
 3. 角色管理：新建角色，修改角色，删除角色，查询角色
 4. 菜单管理：新建菜单，修改菜单，删除菜单，查询菜单
@@ -98,8 +100,11 @@
  - phpstrom
  - vscode
 
+## 企业微信登录效果
+![角色切换](static/screenshot/weixin_login.gif)
+
 ## 截图
- 
+ ![角色切换](static/screenshot/role_switch.png)
  ![角色切换](static/screenshot/role_switch.png)
  ![菜单](static/screenshot/menu.png)
  ![菜单新增](static/screenshot/menu_add.png)
