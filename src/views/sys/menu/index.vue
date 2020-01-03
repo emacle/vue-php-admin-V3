@@ -75,7 +75,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible=false">取消</el-button>
-        <el-button type="primary" @click="dialogStatus==='create' ?createData():updateData()">确定</el-button>
+        <el-button :loading="updateLoading" type="primary" @click="dialogStatus==='create' ?createData():updateData()">确定</el-button>
       </div>
     </el-dialog>
 
@@ -127,6 +127,7 @@ export default {
       filterText: '',
       btnsize: 'mini',
       listLoading: true,
+      updateLoading: false,
       listQuery: {
         page: 1,
         limit: 20,
@@ -405,8 +406,10 @@ export default {
           // console.log('createData valid done...', this.temp)
 
           // 调用api创建数据入库
+          this.updateLoading = true
           createMenu(this.temp).then(res => {
             // 成功后 关闭窗口
+            this.updateLoading = false
             console.log('createMenu...', res)
             this.getData()
             this.dialogFormVisible = false
@@ -459,7 +462,9 @@ export default {
           }
           // console.log(this.temp)
           // 调用api编辑数据入库
+          this.updateLoading = true
           updateMenu(tempData).then(res => {
+            this.updateLoading = false
             if (res.type === 'success') {
               // 后台重新更新数据
               this.getData()

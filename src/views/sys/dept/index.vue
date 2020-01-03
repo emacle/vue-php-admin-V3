@@ -55,7 +55,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确定</el-button>
+        <el-button :loading="updateLoading" type="primary" @click="dialogStatus==='create'?createData():updateData()">确定</el-button>
       </div>
     </el-dialog>
 
@@ -88,6 +88,7 @@ export default {
       // params: this.$route.params,
       filterText: '',
       listLoading: false,
+      updateLoading: false,
       btnsize: 'mini',
       dialogFormVisible: false,
       dialogStatus: '',
@@ -196,8 +197,10 @@ export default {
         if (valid) {
           // console.log('createData valid done...', this.temp)
           // 调用api创建数据入库
+          this.updateLoading = true
           createDept(this.temp).then(res => {
             // 成功后 关闭窗口
+            this.updateLoading = false
             // console.log('createDept...', res)
             if (res.type === 'success') {
               this.fetchData()
@@ -233,7 +236,9 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           // 调用api编辑数据入库
+          this.updateLoading = true
           updateDept(this.temp).then(res => {
+            this.updateLoading = false
             if (res.type === 'success') {
               // 后台重新更新数据
               this.fetchData()

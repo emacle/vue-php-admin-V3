@@ -73,7 +73,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确定</el-button>
+        <el-button :loading="updateLoading" type="primary" @click="dialogStatus==='create'?createData():updateData()">确定</el-button>
       </div>
     </el-dialog>
 
@@ -152,6 +152,7 @@ export default {
       list: [],
       total: 0,
       listLoading: true,
+      updateLoading: false,
       titles: [
         {
           prop: 'id',
@@ -298,7 +299,7 @@ export default {
         this.list = res.data.items
         this.total = res.data.total
         this.listLoading = false
-      })
+      }).catch(() => { })
     },
     // 格式化成树
     formatTree(json) {
@@ -392,8 +393,10 @@ export default {
         if (valid) {
           // console.log('createData valid done...', this.temp)
           // 调用api创建数据入库
+          this.updateLoading = true
           createUser(this.temp).then(res => {
             // 成功后 关闭窗口
+            this.updateLoading = false
             // console.log('createUser...', res)
             if (res.type === 'success') {
               this.fetchData()
@@ -448,7 +451,9 @@ export default {
 
         if (valid) {
           // 调用api编辑数据入库
+          this.updateLoading = true
           updateUser(this.temp).then(res => {
+            this.updateLoading = false
             if (res.type === 'success') {
               // 后台重新更新数据
               this.fetchData()
