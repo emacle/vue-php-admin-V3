@@ -38,3 +38,10 @@ export function corpAuth(code) {
     params: { code }
   })
 }
+
+export function checkRefreshToken() {
+  return request({
+    url: '/sys/user/refreshtoken',
+    method: 'post'
+  })
+}
