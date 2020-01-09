@@ -7,7 +7,7 @@
       <!-- <el-switch v-model="defaultExpandAll" :active-text="defaultExpandAll?'展开节点':'折叠节点'" :active-value="true" :inactive-value="false" inactive-color="gainsboro" /> -->
     </div>
     <!-- tableData.filter( data => !filterText || filterData(data, function(item){return item.title.includes(filterText) })) -->
-    <i-tree-table ref="TreeTable" :data="tableData" :columns="columns" id-key="id" icon="el-icon-arrow-right" stripe border @trigger="onTrigger">
+    <i-tree-table v-loading="listLoading" ref="TreeTable" :data="tableData" :columns="columns" id-key="id" icon="el-icon-arrow-right" stripe border @trigger="onTrigger">
       <el-table-column label="菜单ID" prop="id" />
       <el-table-column label="菜单路由" prop="path" />
       <el-table-column label="路由别名" prop="name" />
@@ -336,12 +336,14 @@ export default {
     },
     getData() {
       // import { createMenu, getTreeOptions, getMenuTree } from '@/api/menu'
+      this.listLoading = true
       getMenuTree().then(res => {
         // console.log('getMenuTree', res)
         const tmpData = res.data
         this.setTreeCollapseStatus(tmpData)
         this.tableData = tmpData
         this.tableDatax = tmpData
+        this.listLoading = false
       })
     },
     editItem(row) {
