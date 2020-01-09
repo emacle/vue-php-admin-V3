@@ -158,6 +158,7 @@ const user = {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_REFRESH_TOKEN', '')
+          commit('SET_CODE', '')
           commit('SET_ROLES', [])
           removeToken()
           removeRefreshToken()
@@ -173,6 +174,7 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         commit('SET_REFRESH_TOKEN', '')
+        commit('SET_CODE', '')
         removeToken()
         removeRefreshToken()
         resolve()

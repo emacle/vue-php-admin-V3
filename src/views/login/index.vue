@@ -37,7 +37,6 @@
                     </span>
                   </i>
                 </el-input>
-
               </el-form-item>
 
               <el-form-item prop="verifycode">
@@ -170,26 +169,37 @@ export default {
   },
   methods: {
     // 获取当前 location.href 里的参数值
-    getUrlParms(name) {
-      var reg = new RegExp('(^|\\?|&)' + name + '=([^&]*)(\\s|&|$)', 'i')
-      // console.log('getvl', location.href)
-      // http://localhost:9527/?code=8xpU6UL2kEiJngHmjOD87ZBbI2gC_bU1uGOMXvyVmn0&state=4924807670805111#/login?redirect=%2Fdashboard
-      if (reg.test(location.href)) { return unescape(RegExp.$2.replace(/\+/g, ' ')) }
-      return ''
-    },
+    // getUrlParms(name) {
+    //   var reg = new RegExp('(^|\\?|&)' + name + '=([^&]*)(\\s|&|$)', 'i')
+    //   console.log('getvl', location.href)
+    //   // http://localhost:9527/?code=8xpU6UL2kEiJngHmjOD87ZBbI2gC_bU1uGOMXvyVmn0&state=4924807670805111#/login?redirect=%2Fdashboard
+    //   if (reg.test(location.href)) { return unescape(RegExp.$2.replace(/\+/g, ' ')) }
+    //   return ''
+    // },
     wxLogin() {
-      console.log('location与windows.location好像是一样...', location)
-      if (location.search && location.search.indexOf('code=') >= 0 && location.search.indexOf('state=') >= 0) {
+      console.log('this.$store.state.user.code', this.$store.state.user.code)
+      if (this.$store.state.user.code) {
         this.activeName = 'code'
-        const code = this.getUrlParms('code')
         this.loading = true
-        this.$store.dispatch('corpAuth', code).then(() => {
+        this.$store.dispatch('corpAuth', this.$store.state.user.code).then(() => {
           this.loading = false
           this.$router.push({ path: '/' })
         }).catch(() => {
           this.loading = false
         })
       }
+      // if (location.search && location.search.indexOf('code=') >= 0 && location.search.indexOf('state=') >= 0) {
+      //   this.activeName = 'code'
+      //   const code = this.getUrlParms('code')
+      //   console.log('获取到code', location, code)
+      //   this.loading = true
+      //   this.$store.dispatch('corpAuth', code).then(() => {
+      //     this.loading = false
+      //     this.$router.push({ path: '/' })
+      //   }).catch(() => {
+      //     this.loading = false
+      //   })
+      // }
     },
     passcallback() {
       this.vSuccess = true
