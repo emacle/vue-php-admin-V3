@@ -2,7 +2,7 @@
 
 **V3 版本加入动态切换角色功能，不同角色功能不同，同时也可归属不同的部门**
 
-**v3版本前后端均使用 develop 分支,token设计存储在数据库表sys_user_token中, 使用时需要 checkout develop, 开启jwt分支用于以php-jwt生成jwt-token重构**
+**v3版本前后端均使用 develop 分支,token设计存储在数据库表sys_user_token中, 使用时需要 checkout develop**
 
 基于 vue-element-admin 和 PHP CodeIgniter RESTful 实现，
 采用前后端分离架构的权限管理系统，PHP快速开发平台，目标是搭建一
@@ -16,8 +16,7 @@
 其余组件如 tags-views等，全部未做变化，可根据需要具体需求进行删减。 
 
 ## demo地址
- [vue-php-admin-V3](http://222.40.42.139:7002/)
- [vue-php-admin](http://172.30.3.11:7000/)
+ [vue-php-admin-V3](http://www.emacle.cf:13000/)
 
 ## 功能介绍
 1. 系统登录：系统用户登录，系统登录认证（token方式），**企业微信扫码登录（测试success）**
@@ -77,8 +76,8 @@
 
     接口调用使用示例：
     ```html
-    http://www.cirest.com:8889/api/v2/sys/menu/testapi
-    http://www.cirest.com:8889/index.php/api/v2/sys/menu/testapi
+    http://www.cirest.com:8889/api/v3/sys/menu/testapi
+    http://www.cirest.com:8889/index.php/api/v3/sys/menu/testapi
     
     request header 配置 X-API-KEY: oocwo8cs88g4c8w8c08ow00ss844cc4osko0s0ks  
     ```
